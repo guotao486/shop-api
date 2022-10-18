@@ -1,9 +1,9 @@
 /*
  * @Author: GG
  * @Date: 2022-10-17 16:28:04
- * @LastEditTime: 2022-10-17 16:31:32
+ * @LastEditTime: 2022-10-18 16:32:59
  * @LastEditors: GG
- * @Description: user error
+ * @Description: user errors
  * @FilePath: \shop-api\domain\user\user.go
  *
  */
