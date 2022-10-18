@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-18 10:36:01
- * @LastEditTime: 2022-10-18 11:03:08
+ * @LastEditTime: 2022-10-18 16:23:41
  * @LastEditors: GG
  * @Description: User dao
  * @FilePath: \shop-api\domain\user\repository.go
@@ -41,7 +41,12 @@ func (r Repository) Create(u *User) error {
 	return result.Error
 }
 
-// 根据用户名查询用户
+/**
+ 根据用户名查询用户
+ @params name string
+ @return User
+ @return error
+**/
 func (r Repository) GetByName(name string) (User, error) {
 	var user User
 	err := r.db.Where("Username = ?", name).Where("IsDelete = ?", 0).First(&user).Error
