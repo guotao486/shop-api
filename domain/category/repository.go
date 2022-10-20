@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-18 16:46:51
- * @LastEditTime: 2022-10-18 17:09:02
+ * @LastEditTime: 2022-10-20 17:15:08
  * @LastEditors: GG
  * @Description: category dao repository
  * @FilePath: \shop-api\domain\category\repository.go
@@ -124,7 +124,7 @@ func (r *Repository) GetAll(pageIndex, pageSize int) ([]Category, int) {
  * @param {*[]Category} categorys
  * @return {*}
  */
-func (r *Repository) BulkCreate(categorys *[]Category) (int, error) {
+func (r *Repository) BulkCreate(categorys []*Category) (int, error) {
 	var count int64
 	err := r.db.Create(&categorys).Count(&count).Error
 	return int(count), err
