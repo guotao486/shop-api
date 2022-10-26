@@ -1,0 +1,11 @@
+Env: "dev"
+
+DatabaseSettings:
+  DatabaseURI: "shop-api:bSS5nwYaEwbTr3Ze@tcp(110.40.208.203:3306)/shop-api?parseTime=True&loc=Local"
+  DatabaseName: "shop-api"
+  Username: "shop-api"
+  Password: "bSS5nwYaEwbTr3Ze"
+
+
+JwtSettings:
+  SecretKey: "shop-api"
