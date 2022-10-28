@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 16:45:15
- * @LastEditTime: 2022-10-26 17:17:31
+ * @LastEditTime: 2022-10-28 16:05:39
  * @LastEditors: GG
  * @Description:error handle
  * @FilePath: \shop-api\utils\api_helper\error_handler.go
@@ -26,7 +26,7 @@ func HandleError(g *gin.Context, err error) {
 }
 
 func HandleSuccess(g *gin.Context, obj any) {
-	g.JSON(http.StatusCreated, obj)
+	g.JSON(http.StatusOK, obj)
 	g.Abort()
 	return
 }
