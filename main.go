@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-11-05 15:58:09
- * @LastEditTime: 2022-11-05 16:53:34
+ * @LastEditTime: 2022-11-05 17:03:29
  * @LastEditors: GG
  * @Description: main
  * @FilePath: \shop-api\main.go
@@ -14,6 +14,7 @@ import (
 	"log"
 	"net/http"
 	"shopping/api"
+	_ "shopping/docs"
 	"shopping/utils/graceful"
 	"time"
 
