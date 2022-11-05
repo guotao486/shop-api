@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-11-05 11:09:46
- * @LastEditTime: 2022-11-05 15:33:48
+ * @LastEditTime: 2022-11-05 15:42:09
  * @LastEditors: GG
  * @Description: 路由文件
  * @FilePath: \shop-api\api\router.go
@@ -66,6 +66,11 @@ func CreateDBs() *Databaces {
 	}
 }
 
+/**
+ * @description: 路由注册
+ * @param {*gin.Engine} r
+ * @return {*}
+ */
 func RegisterHandlers(r *gin.Engine) {
 	dbs := *CreateDBs()
 	RegisterCategoryHandlers(r, dbs)
