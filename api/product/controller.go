@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-28 16:23:35
- * @LastEditTime: 2022-10-28 17:07:10
+ * @LastEditTime: 2022-11-05 17:02:21
  * @LastEditors: GG
  * @Description: product controller
  * @FilePath: \shop-api\api\product\controller.go
@@ -56,7 +56,7 @@ func (c *Controller) GetProducts(g *gin.Context) {
 // @Produce json
 // @Param Authorization  header    string  true  "Authentication header"
 // @Param CreateProductRequest body CreateProductRequest true "product information"
-// @Success 200 {object} api_helper.CreateProductResponse
+// @Success 200 {object} CreateProductResponse
 // @Failure 400  {object} api_helper.ErrorResponse
 // @Router /product [post]
 func (c *Controller) CreateProduct(g *gin.Context) {

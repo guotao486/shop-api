@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-29 10:28:29
- * @LastEditTime: 2022-10-29 10:43:48
+ * @LastEditTime: 2022-11-05 16:59:57
  * @LastEditors: GG
  * @Description: cart controller
  * @FilePath: \shop-api\api\cart\controller.go
@@ -38,7 +38,7 @@ func NewCartController(cartService *cart.Service) *Controller {
 // @Produce json
 // @Param        Authorization  header    string  true  "Authentication header"
 // @Param ItemCartRequest body ItemCartRequest true "product information"
-// @Success 200 {object} api_helper.ItemCartResponse
+// @Success 200 {object} ItemCartResponse
 // @Failure 400  {object} api_helper.ErrorResponse
 // @Router /cart/item [post]
 func (c *Controller) AddItem(g *gin.Context) {

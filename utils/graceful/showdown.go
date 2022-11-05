@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-11-05 15:43:01
- * @LastEditTime: 2022-11-05 15:54:52
+ * @LastEditTime: 2022-11-05 16:44:55
  * @LastEditors: GG
  * @Description: 优雅的关闭gin服务器工具类
  * @FilePath: \shop-api\utils\graceful\showdown.go
@@ -25,7 +25,7 @@ import (
  * @param {time.Duration} timeout
  * @return {*}
  */
-func ShowdownGin(instance *http.Server, timeout time.Duration) {
+func ShutdownGin(instance *http.Server, timeout time.Duration) {
 	// 操作信号
 	quit := make(chan os.Signal)
 	// kill (no param) default send syscanll.SIGTERM

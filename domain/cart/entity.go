@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-24 10:02:48
- * @LastEditTime: 2022-10-24 11:28:54
+ * @LastEditTime: 2022-11-05 16:49:10
  * @LastEditors: GG
  * @Description:cart model cart_item model
  * @FilePath: \shop-api\domain\cart\entity.go
