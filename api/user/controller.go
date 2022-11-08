@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-26 16:36:23
- * @LastEditTime: 2022-10-26 17:38:41
+ * @LastEditTime: 2022-11-07 14:47:12
  * @LastEditors: GG
  * @Description: user controller
  * @FilePath: \shop-api\api\user\controller.go
@@ -10,6 +10,7 @@
 package user
 
 import (
+	"fmt"
 	"os"
 	"shopping/config"
 	"shopping/domain/user"
@@ -57,10 +58,11 @@ func (c *Controller) CreateUser(g *gin.Context) {
 		return
 	}
 
-	newUser := user.NewUser(req.Username, req.Password, req.Password)
+	newUser := user.NewUser(req.Username, req.Password, req.Password2)
 	err := c.userService.CreateUser(newUser)
 	if err != nil {
 		api_helper.HandleError(g, err)
+		return
 	}
 
 	api_helper.HandleSuccess(g, CreateUserResponse{
@@ -79,7 +81,7 @@ func (c *Controller) CreateUser(g *gin.Context) {
 // @Router /user/login [post]
 func (c *Controller) Login(g *gin.Context) {
 	var req LoginRequest
-	if err := g.ShouldBind(req); err != nil {
+	if err := g.ShouldBind(&req); err != nil {
 		api_helper.HandleError(g, api_helper.ErrInvalidBody)
 		return
 	}
@@ -92,10 +94,11 @@ func (c *Controller) Login(g *gin.Context) {
 
 	// 验证token
 	decodeClaims := jwtHelper.VerifyToken(currentUser.Token, c.appConfig.SecretKey)
+	fmt.Printf("decodeClaims: %v\n", decodeClaims)
 	// token无效则重新生成token
 	if decodeClaims == nil {
 		jwtClaims := jwt.NewWithClaims(
-			jwt.SigningMethodES256, jwt.MapClaims{
+			jwt.SigningMethodHS256, jwt.MapClaims{
 				"userId":   strconv.FormatInt(int64(currentUser.ID), 10),
 				"username": currentUser.Username,
 				"iat":      time.Now().Unix(),
@@ -104,9 +107,9 @@ func (c *Controller) Login(g *gin.Context) {
 				"isAdmin":  currentUser.IsAdmin,
 			})
 
-		token := jwtHelper.GenerateToken(jwtClaims, c.appConfig.SecretKey)
+		token, err := jwtHelper.GenerateToken(jwtClaims, c.appConfig.SecretKey)
 		currentUser.Token = token
-		err := c.userService.UpdateUser(&currentUser)
+		err = c.userService.UpdateUser(&currentUser)
 
 		if err != nil {
 			api_helper.HandleError(g, err)

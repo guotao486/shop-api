@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-28 16:07:54
- * @LastEditTime: 2022-10-28 16:21:52
+ * @LastEditTime: 2022-11-07 15:20:15
  * @LastEditors: GG
  * @Description: product controller types
  * @FilePath: \shop-api\api\product\types.go
@@ -44,6 +44,11 @@ type UpdateProductResponse struct {
  * @description: 类型转换，UpdateProductRequest to Product
  * @return {*}
  */
-func (p *UpdateProductRequest) ToProduct() *product.Product {
-	return product.NewProduct(p.Name, p.Desc, p.Count, p.Price, p.CategoryID)
+func (p *UpdateProductRequest) ToProduct(product *product.Product) *product.Product {
+	product.Name = p.Name
+	product.Desc = p.Desc
+	product.Price = p.Price
+	product.StockCount = p.Count
+	product.CategoryID = p.CategoryID
+	return product
 }

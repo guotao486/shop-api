@@ -16,18 +16,11 @@ definitions:
         type: integer
       count:
         type: integer
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
       product:
         $ref: '#/definitions/product.Product'
+        type: object
       productID:
         type: integer
-      updatedAt:
-        type: string
     type: object
   cart.ItemCartRequest:
     properties:
@@ -41,20 +34,21 @@ definitions:
       message:
         type: string
     type: object
+  category.Category:
+    properties:
+      desc:
+        type: string
+      isActive:
+        type: boolean
+      name:
+        type: string
+    type: object
   category.CreateCategoryRequest:
     properties:
       desc:
         type: string
       name:
         type: string
-    type: object
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
     type: object
   order.CancelOrderRequest:
     properties:
@@ -63,7 +57,8 @@ definitions:
     type: object
   pagination.Pages:
     properties:
-      items: {}
+      items:
+        type: object
       page:
         description: 页码
         type: integer
@@ -104,14 +99,8 @@ definitions:
     properties:
       categoryID:
         type: integer
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
       desc:
         type: string
-      id:
-        type: integer
       isDelete:
         type: boolean
       name:
@@ -122,8 +111,6 @@ definitions:
         type: string
       stockCount:
         type: integer
-      updatedAt:
-        type: string
     type: object
   product.UpdateProductRequest:
     properties:
@@ -181,6 +168,7 @@ info:
     name: golang技术栈
     url: https://www.golang-tech-stack.com
   description: 电商项目
+  license: {}
   title: 电商项目
   version: "1.0"
 paths:
@@ -210,7 +198,6 @@ paths:
       summary: 获得购物车商品列表
       tags:
       - Cart
-  /cart/item:
     patch:
       consumes:
       - application/json

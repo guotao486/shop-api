@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-21 16:14:10
- * @LastEditTime: 2022-10-21 16:50:30
+ * @LastEditTime: 2022-11-07 15:15:17
  * @LastEditors: GG
  * @Description:product service
  * @FilePath: \shop-api\domain\product\service.go
@@ -73,4 +73,13 @@ func (s *Service) UpdateProduct(product *Product) error {
 func (s *Service) DeleteProduct(sku string) error {
 	err := s.r.Delete(sku)
 	return err
+}
+
+/**
+ * @description: 根据sku查找商品
+ * @param {string} sku
+ * @return {*}
+ */
+func (s *Service) FindProductBySku(sku string) (*Product, error) {
+	return s.r.FindBySku(sku)
 }

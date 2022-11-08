@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 10:11:17
- * @LastEditTime: 2022-10-25 11:56:05
+ * @LastEditTime: 2022-11-07 17:12:39
  * @LastEditors: GG
  * @Description:
  * @FilePath: \shop-api\domain\order\hooks.go
@@ -24,7 +24,7 @@ import (
 func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
 	var currentCart cart.Cart
 	// 检查购物车
-	if err := tx.Where("user_id = ?", order.UserID).First(&currentCart).Error; err != nil {
+	if err := tx.Where("UserID = ?", order.UserID).First(&currentCart).Error; err != nil {
 		return err
 	}
 	return nil
@@ -38,11 +38,11 @@ func (order *Order) BeforeCreate(tx *gorm.DB) (err error) {
 func (order *Order) AfterCreate(tx *gorm.DB) (err error) {
 	var currentCart cart.Cart
 	// 检查购物车
-	if err := tx.Where("user_id = ?", order.UserID).First(&currentCart).Error; err != nil {
+	if err := tx.Where("UserID = ?", order.UserID).First(&currentCart).Error; err != nil {
 		return err
 	}
 	// 删除购物车商品
-	if err := tx.Where("cart_id = ?", currentCart.ID).Unscoped().Delete(&cart.Item{}).Error; err != nil {
+	if err := tx.Where("CartID = ?", currentCart.ID).Unscoped().Delete(&cart.Item{}).Error; err != nil {
 		return err
 	}
 	// 删除购物车
@@ -62,7 +62,7 @@ func (orderItem *OrderItem) BeforeSave(tx *gorm.DB) (err error) {
 	var currentOrderItem OrderItem
 
 	// 查询商品是否存在
-	if err := tx.Where("id = ?", orderItem.ProductID).First(currentProduct).Error; err != nil {
+	if err := tx.Where("ID = ?", orderItem.ProductID).First(currentProduct).Error; err != nil {
 		return err
 	}
 
@@ -76,7 +76,7 @@ func (orderItem *OrderItem) BeforeSave(tx *gorm.DB) (err error) {
 	}
 
 	// 乐观锁，更新商品库存
-	if err := tx.Model(&currentProduct).Where("stockCount = ?", currentProduct.StockCount).Update("stockCount", newStockCount).Error; err != nil {
+	if err := tx.Model(&currentProduct).Where("StockCount = ?", currentProduct.StockCount).Update("StockCount", newStockCount).Error; err != nil {
 		return err
 	}
 
@@ -96,19 +96,19 @@ func (orderItem *OrderItem) BeforeSave(tx *gorm.DB) (err error) {
 func (order *Order) BeforeUpdate(tx *gorm.DB) (err error) {
 	if order.IsCanceled {
 		var orderItems []OrderItem
-		if err := tx.Where("order_id = ?", order.ID).First(&orderItems).Error; err != nil {
+		if err := tx.Where("OrderID = ?", order.ID).First(&orderItems).Error; err != nil {
 			return err
 		}
 
 		for _, item := range orderItems {
 			var currentProduct product.Product
 
-			if err := tx.Where("id = ?", item.ProductID).First(&currentProduct).Error; err != nil {
+			if err := tx.Where("ID = ?", item.ProductID).First(&currentProduct).Error; err != nil {
 				return err
 			}
 
 			newStockCount := currentProduct.StockCount + item.Count
-			if err := tx.Model(&currentProduct).Where("stockCount = ?", currentProduct.StockCount).Update("stockCount = ?", newStockCount).Error; err != nil {
+			if err := tx.Model(&currentProduct).Where("StockCount = ?", currentProduct.StockCount).Update("StockCount = ?", newStockCount).Error; err != nil {
 				return err
 			}
 			if err := tx.Model(&item).Update("IsCanceled", true).Error; err != nil {

@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-28 16:23:35
- * @LastEditTime: 2022-11-05 17:02:21
+ * @LastEditTime: 2022-11-07 15:03:43
  * @LastEditors: GG
  * @Description: product controller
  * @FilePath: \shop-api\api\product\controller.go
@@ -10,6 +10,7 @@
 package product
 
 import (
+	"errors"
 	"shopping/domain/product"
 	"shopping/utils/api_helper"
 	"shopping/utils/pagination"
@@ -89,12 +90,23 @@ func (c *Controller) CreateProduct(g *gin.Context) {
 // @Router /product [patch]
 func (c *Controller) UpdateProduct(g *gin.Context) {
 	var req UpdateProductRequest
-	if err := g.ShouldBind(req); err != nil {
+	if err := g.ShouldBind(&req); err != nil {
 		api_helper.HandleError(g, err)
 		return
 	}
 
-	err := c.productService.UpdateProduct(req.ToProduct())
+	if req.SKU == "" {
+		api_helper.HandleError(g, errors.New("请选择商品"))
+		return
+	}
+	var currentProduct *product.Product
+	currentProduct, err := c.productService.FindProductBySku(req.SKU)
+	if err != nil {
+		api_helper.HandleError(g, product.ErrProductNotFound)
+		return
+	}
+
+	err = c.productService.UpdateProduct(req.ToProduct(currentProduct))
 	if err != nil {
 		api_helper.HandleError(g, err)
 		return

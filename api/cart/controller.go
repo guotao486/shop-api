@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-29 10:28:29
- * @LastEditTime: 2022-11-05 16:59:57
+ * @LastEditTime: 2022-11-07 17:05:14
  * @LastEditors: GG
  * @Description: cart controller
  * @FilePath: \shop-api\api\cart\controller.go
@@ -10,6 +10,7 @@
 package cart
 
 import (
+	"errors"
 	"shopping/domain/cart"
 	"shopping/utils/api_helper"
 
@@ -40,7 +41,7 @@ func NewCartController(cartService *cart.Service) *Controller {
 // @Param ItemCartRequest body ItemCartRequest true "product information"
 // @Success 200 {object} ItemCartResponse
 // @Failure 400  {object} api_helper.ErrorResponse
-// @Router /cart/item [post]
+// @Router /cart [post]
 func (c *Controller) AddItem(g *gin.Context) {
 	var req ItemCartRequest
 	if err := g.ShouldBind(&req); err != nil {
@@ -69,7 +70,7 @@ func (c *Controller) AddItem(g *gin.Context) {
 // @Param ItemCartRequest body ItemCartRequest true "product information"
 // @Success 200 {object} api_helper.Response
 // @Failure 400  {object} api_helper.ErrorResponse
-// @Router /cart/item [patch]
+// @Router /cart [patch]
 func (c *Controller) UpdateItem(g *gin.Context) {
 	var req ItemCartRequest
 	if err := g.ShouldBind(&req); err != nil {
@@ -77,6 +78,10 @@ func (c *Controller) UpdateItem(g *gin.Context) {
 		return
 	}
 
+	if req.SKU == "" {
+		api_helper.HandleError(g, errors.New("请选择商品"))
+		return
+	}
 	userId := api_helper.GetUserId(g)
 	err := c.cartService.UpdateItem(userId, req.SKU, req.Count)
 	if err != nil {

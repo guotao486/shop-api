@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-26 16:10:30
- * @LastEditTime: 2022-10-26 16:29:58
+ * @LastEditTime: 2022-11-07 14:46:43
  * @LastEditors: GG
  * @Description: jwt
  * @FilePath: \shop-api\utils\jwt\jwt_helper.go
@@ -31,11 +31,9 @@ type DecodeToken struct {
  * @param {string} secret
  * @return {*}
  */
-func GenerateToken(claims *jwt.Token, secret string) (token string) {
-	hmacSecretString := secret
-	hmacSecret := []byte(hmacSecretString)
-	token, _ = claims.SignedString(hmacSecret)
-	return
+func GenerateToken(claims *jwt.Token, secret string) (token string, err error) {
+	hmacSecret := []byte(secret)
+	return claims.SignedString(hmacSecret)
 }
 
 /**

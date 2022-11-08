@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-17 15:59:03
- * @LastEditTime: 2022-10-17 16:03:58
+ * @LastEditTime: 2022-11-07 10:33:09
  * @LastEditors: GG
  * @Description: User model
  * @FilePath: \shop-api\domain\user\entity.go
@@ -28,7 +28,7 @@ func NewUser(username, password, password2 string) *User {
 	return &User{
 		Username:  username,
 		Password:  password,
-		Password2: password,
+		Password2: password2,
 		IsDelete:  false,
 		IsAdmin:   false,
 	}

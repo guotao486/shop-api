@@ -7,6 +7,7 @@
             "name": "golang技术栈",
             "url": "https://www.golang-tech-stack.com"
         },
+        "license": {},
         "version": "1.0"
     },
     "host": "localhost:8080",
@@ -50,9 +51,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/cart/item": {
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -664,23 +663,12 @@
                 "count": {
                     "type": "integer"
                 },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
                 "product": {
+                    "type": "object",
                     "$ref": "#/definitions/product.Product"
                 },
                 "productID": {
                     "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         },
@@ -703,6 +691,20 @@
                 }
             }
         },
+        "category.Category": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "category.CreateCategoryRequest": {
             "type": "object",
             "properties": {
@@ -711,18 +713,6 @@
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
                 }
             }
         },
@@ -737,7 +727,9 @@
         "pagination.Pages": {
             "type": "object",
             "properties": {
-                "items": {},
+                "items": {
+                    "type": "object"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
@@ -798,17 +790,8 @@
                 "categoryID": {
                     "type": "integer"
                 },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
                 "desc": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "isDelete": {
                     "type": "boolean"
@@ -824,9 +807,6 @@
                 },
                 "stockCount": {
                     "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         },

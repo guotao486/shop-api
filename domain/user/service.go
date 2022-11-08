@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-18 15:58:42
- * @LastEditTime: 2022-10-18 16:22:29
+ * @LastEditTime: 2022-11-07 10:37:06
  * @LastEditors: GG
  * @Description:user service
  * @FilePath: \shop-api\domain\user\service.go
@@ -9,7 +9,9 @@
  */
 package user
 
-import "shopping/utils/hash"
+import (
+	"shopping/utils/hash"
+)
 
 // 用户service结构体
 type Service struct {
@@ -39,12 +41,12 @@ func (s Service) CreateUser(user *User) error {
 	}
 
 	// 无效用户名
-	if ValidateUserName(user.Username) {
+	if !ValidateUserName(user.Username) {
 		return ErrInvalidUsername
 	}
 
 	// 无效密码
-	if ValidatePassword(user.Password) {
+	if !ValidatePassword(user.Password) {
 		return ErrInvalidPassword
 	}
 
