@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 10:11:17
- * @LastEditTime: 2022-11-07 17:12:39
+ * @LastEditTime: 2022-11-14 16:51:59
  * @LastEditors: GG
  * @Description:
  * @FilePath: \shop-api\domain\order\hooks.go
@@ -53,38 +53,32 @@ func (order *Order) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 /**
- * @description: 保存订单商品之前，更新产品库存
+ * @description: 保存订单商品之后，更新产品库存
  * @param {*gorm.DB} tx
  * @return {*}
  */
-func (orderItem *OrderItem) BeforeSave(tx *gorm.DB) (err error) {
+func (orderItem *OrderItem) BeforeCreate(tx *gorm.DB) (err error) {
 	var currentProduct product.Product
-	var currentOrderItem OrderItem
-
+	var currentOrderItem = orderItem
 	// 查询商品是否存在
-	if err := tx.Where("ID = ?", orderItem.ProductID).First(currentProduct).Error; err != nil {
+	if err = tx.Where("ID = ?", orderItem.ProductID).First(&currentProduct).Error; err != nil {
 		return err
 	}
-
 	// 订单商品数量
 	reservedStockCount := currentOrderItem.Count
-
 	// 要扣除的库存
 	newStockCount := currentProduct.StockCount - reservedStockCount
 	if newStockCount < 0 {
 		return ErrNotEnoughStock
 	}
-
 	// 乐观锁，更新商品库存
 	if err := tx.Model(&currentProduct).Where("StockCount = ?", currentProduct.StockCount).Update("StockCount", newStockCount).Error; err != nil {
 		return err
 	}
-
 	if orderItem.Count == 0 {
-		err := tx.Unscoped().Delete(&orderItem).Error
+		err = tx.Unscoped().Delete(&orderItem).Error
 		return err
 	}
-
 	return nil
 }
 
@@ -96,22 +90,20 @@ func (orderItem *OrderItem) BeforeSave(tx *gorm.DB) (err error) {
 func (order *Order) BeforeUpdate(tx *gorm.DB) (err error) {
 	if order.IsCanceled {
 		var orderItems []OrderItem
-		if err := tx.Where("OrderID = ?", order.ID).First(&orderItems).Error; err != nil {
+		if err = tx.Where("OrderID = ?", order.ID).Find(&orderItems).Error; err != nil {
 			return err
 		}
 
 		for _, item := range orderItems {
 			var currentProduct product.Product
-
-			if err := tx.Where("ID = ?", item.ProductID).First(&currentProduct).Error; err != nil {
+			if err = tx.Where("ID = ?", item.ProductID).First(&currentProduct).Error; err != nil {
 				return err
 			}
-
 			newStockCount := currentProduct.StockCount + item.Count
-			if err := tx.Model(&currentProduct).Where("StockCount = ?", currentProduct.StockCount).Update("StockCount = ?", newStockCount).Error; err != nil {
+			if err = tx.Model(&currentProduct).Where("StockCount = ?", currentProduct.StockCount).Update("StockCount", newStockCount).Error; err != nil {
 				return err
 			}
-			if err := tx.Model(&item).Update("IsCanceled", true).Error; err != nil {
+			if err = tx.Model(&item).Update("IsCanceled", true).Error; err != nil {
 				return err
 			}
 		}

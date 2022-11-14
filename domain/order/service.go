@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 15:44:20
- * @LastEditTime: 2022-10-25 16:21:19
+ * @LastEditTime: 2022-11-14 16:04:45
  * @LastEditors: GG
  * @Description: order service
  * @FilePath: \shop-api\domain\order\service.go
@@ -10,6 +10,7 @@
 package order
 
 import (
+	"fmt"
 	"shopping/domain/cart"
 	"shopping/domain/product"
 	"shopping/utils/pagination"
@@ -62,14 +63,14 @@ func (s *Service) CompleteOrder(userId uint) error {
 	if err != nil {
 		return err
 	}
-
 	if len(cartItems) == 0 {
 		return ErrEmptyCartFound
 	}
 
 	orderItems := make([]OrderItem, 0)
-	for _, citem := range cartItems {
-		orderItems = append(orderItems, *NewOrderItem(citem.Count, citem.ProductID))
+	for i, citem := range cartItems {
+		fmt.Printf("i: %v\n", i)
+		orderItems = append(orderItems, *NewOrderItem(citem.Count, citem.ProductID, citem.Product.Price))
 	}
 	err = s.orderRepository.Create(NewOrder(userId, orderItems))
 	return err
@@ -84,9 +85,8 @@ func (s *Service) CompleteOrder(userId uint) error {
 func (s *Service) CancelOrder(uid, oid uint) error {
 	currentOrder, err := s.orderRepository.FindByOrderId(oid)
 	if err != nil {
-		return nil
+		return err
 	}
-
 	if currentOrder.UserID != uid {
 		return ErrInvalidOrderID
 	}
@@ -96,7 +96,7 @@ func (s *Service) CancelOrder(uid, oid uint) error {
 		return ErrCancelDurationPassed
 	}
 	currentOrder.IsCanceled = true
-	err = s.orderRepository.Update(*currentOrder)
+	err = s.orderRepository.Update(currentOrder)
 	return err
 }
 

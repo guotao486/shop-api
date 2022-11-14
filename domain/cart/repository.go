@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-24 15:31:47
- * @LastEditTime: 2022-10-24 17:22:59
+ * @LastEditTime: 2022-11-14 15:16:04
  * @LastEditors: GG
  * @Description: cart repository
  * @FilePath: \shop-api\domain\cart\repository.go

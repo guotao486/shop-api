@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 09:54:40
- * @LastEditTime: 2022-10-25 15:55:27
+ * @LastEditTime: 2022-11-14 15:23:19
  * @LastEditors: GG
  * @Description: Order and OrderItem model
  * @FilePath: \shop-api\domain\order\entity.go
@@ -34,6 +34,7 @@ type OrderItem struct {
 	Count      int
 	OrderID    uint
 	IsCanceled bool
+	Price      float32
 }
 
 /**
@@ -45,7 +46,7 @@ type OrderItem struct {
 func NewOrder(uid uint, items []OrderItem) *Order {
 	var totalPrice float32 = 0.0
 	for _, item := range items {
-		totalPrice += item.Product.Price
+		totalPrice += item.Price
 	}
 	return &Order{
 		UserID:     uid,
@@ -61,10 +62,11 @@ func NewOrder(uid uint, items []OrderItem) *Order {
  * @param {uint} pid
  * @return {*}
  */
-func NewOrderItem(count int, pid uint) *OrderItem {
+func NewOrderItem(count int, pid uint, price float32) *OrderItem {
 	return &OrderItem{
 		ProductID:  pid,
 		Count:      count,
 		IsCanceled: false,
+		Price:      price,
 	}
 }

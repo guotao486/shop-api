@@ -1,7 +1,7 @@
 /*
  * @Author: GG
  * @Date: 2022-10-25 15:05:23
- * @LastEditTime: 2022-10-25 15:28:05
+ * @LastEditTime: 2022-11-14 16:11:20
  * @LastEditors: GG
  * @Description:order repository
  * @FilePath: \shop-api\domain\order\order_repository.go
@@ -59,8 +59,8 @@ func (r *Repository) Create(order *Order) error {
  * @param {Order} newOrder
  * @return {*}
  */
-func (r *Repository) Update(newOrder Order) error {
-	result := r.db.Save(&newOrder)
+func (r *Repository) Update(newOrder *Order) error {
+	result := r.db.Updates(&newOrder)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -74,7 +74,7 @@ func (r *Repository) Update(newOrder Order) error {
  */
 func (r *Repository) FindByOrderId(oid uint) (*Order, error) {
 	var currentOrder Order
-	if err := r.db.Where("is_canceled = ?", false).Where("id = ?", oid).First(&currentOrder).Error; err != nil {
+	if err := r.db.Where("IsCanceled = ?", false).Where("id = ?", oid).First(&currentOrder).Error; err != nil {
 		return nil, err
 	}
 	return &currentOrder, nil
